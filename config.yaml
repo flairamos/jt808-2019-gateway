@@ -1,0 +1,17 @@
+server:
+  port: 6024
+
+database:
+  driver: postgres
+  user: postgres
+  passwd: postgres
+  addr: 127.0.0.1
+  port: 5432
+  dbName: test
+  zone: Asia/Shanghai
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: redis
+  database: 0
