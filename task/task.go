@@ -1,9 +1,8 @@
 package task
 
 import (
-	"log"
-
 	"github.com/robfig/cron/v3"
+	"log"
 )
 
 func Init() {
@@ -19,4 +18,5 @@ func task1(c *cron.Cron) {
 		log.Println("添加定时任务失败1")
 		return
 	}
+	findAllCar()
 }

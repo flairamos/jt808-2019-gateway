@@ -1,6 +1,7 @@
 package protocol
 
 import (
+	"encoding/hex"
 	"fmt"
 	"testing"
 )
@@ -23,4 +24,13 @@ func Test2(t *testing.T) {
 	if err != nil {
 		fmt.Println("1", id, s, err)
 	}
+}
+
+func Test3(t *testing.T) {
+	message := "7e0102000a000123456789000130313233343536373839807e"
+	idV2013, s, err := ParsePaketMessageIdV2013(message)
+	fmt.Println(idV2013, s, err)
+	v2013 := CommonReplyV2013(idV2013, 0)
+	fmt.Println(v2013)
+	fmt.Println(hex.EncodeToString(v2013))
 }

@@ -77,16 +77,18 @@ func (s *PgSink) batchLoop() {
 func (s *PgSink) flush(list []*protocol.Location) {
 	ctx, cancel := context.WithTimeout(s.ctx, 3*time.Second)
 	defer cancel()
-	if len(list) > 0 {
-		err := s.pool.WithContext(ctx).Table("iot_car_location").Create(&list).Error
-		if err != nil {
-			// 超时错误和数据库错误都打印，便于排查
-			// 判断是否为超时错误
-			if errors.Is(ctx.Err(), context.DeadlineExceeded) {
-				fmt.Printf("create out of deadline: %v", err)
-				return
-			}
-		}
-		fmt.Printf("flush track batch size: %d\n", len(list))
+	if len(list) == 0 {
+		return
 	}
+	err := s.pool.WithContext(ctx).Table("iot_car_location").Create(&list).Error
+	if err != nil {
+		// 入库失败必须如实记录：本批数据已丢失，不能继续打印成功日志误导排查
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			fmt.Printf("flush track batch timeout, drop %d records: %v\n", len(list), err)
+		} else {
+			fmt.Printf("flush track batch failed, drop %d records: %v\n", len(list), err)
+		}
+		return
+	}
+	fmt.Printf("flush track batch size: %d\n", len(list))
 }

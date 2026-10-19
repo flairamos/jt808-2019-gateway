@@ -1,5 +1,5 @@
 server:
-  port: 6024
+  port: 8080
 
 database:
   driver: postgres
@@ -13,5 +13,5 @@ database:
 redis:
   host: 127.0.0.1
   port: 6379
-  password: redis
+  password: 
   database: 0

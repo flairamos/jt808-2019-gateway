@@ -40,12 +40,11 @@ type redisConf struct {
 func Init() {
 	data, err := os.ReadFile("./config.yaml")
 	if err != nil {
-		fmt.Println(err)
-		return
+		// 配置读不到必须直接终止：否则Config全零值，服务会监听到随机端口(0)且无库可写
+		panic(fmt.Sprintf("读取配置文件config.yaml失败: %v", err))
 	}
 	err = yaml.Unmarshal(data, &Config)
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(fmt.Sprintf("解析配置文件config.yaml失败: %v", err))
 	}
 }
